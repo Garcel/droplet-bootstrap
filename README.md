@@ -90,8 +90,8 @@ Feel free to explore, contribute, or adapt the resources to fit your own needs!
 **1. Clone the repo**
 
 ```bash
-git clone https://github.com/your-user/homelab.git
-cd homelab
+git clone https://github.com/your-user/droplet-bootstrap.git
+cd droplet-bootstrap
 ```
 
 **2. Configure your variables**
