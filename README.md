@@ -1,4 +1,4 @@
-# ☁️ do-infra
+# ☁️ droplet-bootstrap
 
 ## Overview
 
