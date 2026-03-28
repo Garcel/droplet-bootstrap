@@ -1,0 +1,43 @@
+---
+- name: Create deploy user
+  ansible.builtin.user:
+    name: deploy
+    shell: /bin/bash
+    groups: sudo
+    append: true
+    create_home: true
+    password: '*'
+
+- name: Allow deploy user passwordless sudo
+  ansible.builtin.copy:
+    content: "deploy ALL=(ALL) NOPASSWD:ALL\n"
+    dest: /etc/sudoers.d/deploy
+    mode: "0440"
+    validate: "visudo -cf %s"
+
+- name: Create .ssh directory for deploy user
+  ansible.builtin.file:
+    path: /home/deploy/.ssh
+    state: directory
+    owner: deploy
+    group: deploy
+    mode: "0700"
+
+- name: Copy root authorized keys to deploy user
+  ansible.builtin.copy:
+    src: /root/.ssh/authorized_keys
+    dest: /home/deploy/.ssh/authorized_keys
+    remote_src: true
+    owner: deploy
+    group: deploy
+    mode: "0600"
+
+- name: Verify deploy user can be reached via SSH
+  ansible.builtin.command: cat /home/deploy/.ssh/authorized_keys
+  register: deploy_keys
+  changed_when: false
+
+- name: Fail if no authorized keys found for deploy user
+  ansible.builtin.fail:
+    msg: "No authorized keys found for deploy user — SSH access will be locked out"
+  when: deploy_keys.stdout | length == 0

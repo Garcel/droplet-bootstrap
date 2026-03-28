@@ -1,0 +1,58 @@
+---
+- name: Apply network hardening via sysctl
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    sysctl_set: true
+    reload: true
+  loop:
+    - { key: net.ipv4.icmp_echo_ignore_broadcasts, value: "1" }
+    - { key: net.ipv4.conf.all.accept_source_route, value: "0" }
+    - { key: net.ipv6.conf.all.accept_source_route, value: "0" }
+    - { key: net.ipv4.conf.all.accept_redirects, value: "0" }
+    - { key: net.ipv6.conf.all.accept_redirects, value: "0" }
+    - { key: net.ipv4.conf.all.send_redirects, value: "0" }
+    - { key: net.ipv4.tcp_syncookies, value: "1" }
+    - { key: net.ipv4.conf.all.log_martians, value: "1" }
+    - { key: net.ipv4.conf.all.rp_filter, value: "1" }
+    - { key: net.ipv4.conf.default.rp_filter, value: "1" }
+
+- name: Restrict shared memory
+  ansible.posix.mount:
+    path: /run/shm
+    src: none
+    fstype: tmpfs
+    opts: defaults,noexec,nosuid,nodev
+    state: mounted
+
+- name: Disable core dumps
+  ansible.builtin.copy:
+    content: |
+      * hard core 0
+      * soft core 0
+    dest: /etc/security/limits.d/disable-coredumps.conf
+    mode: "0644"
+
+- name: Check if rpcbind is installed
+  ansible.builtin.command: dpkg -s rpcbind
+  register: rpcbind_check
+  changed_when: false
+  failed_when: false
+
+- name: Disable rpcbind if present
+  ansible.builtin.systemd:
+    name: rpcbind
+    enabled: false
+    state: stopped
+  when: rpcbind_check.rc == 0
+
+- name: Prevent sensitive commands from being saved in shell history
+  ansible.builtin.copy:
+    content: |
+      # Commands prefixed with a space are not saved to history
+      HISTCONTROL=ignoreboth
+
+      # Skip commands that look like they contain secrets
+      HISTIGNORE="*TOKEN*:*SECRET*:*KEY*:*PASSWORD*:*PASS=*:*token=*:*secret=*:*key=*:*password=*:*Authorization*"
+    dest: /etc/profile.d/history-security.sh
+    mode: "0644"

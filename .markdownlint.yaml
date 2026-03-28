@@ -1,0 +1,13 @@
+---
+line_length:
+  line_length: 120
+
+# Allow inline HTML (common in GitHub READMEs)
+no-inline-html: false
+
+# Allow duplicate headings in different sections
+no-duplicate-heading:
+  siblings_only: true
+
+# Allow trailing punctuation in headings
+no-trailing-punctuation: false

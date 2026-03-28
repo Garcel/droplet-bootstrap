@@ -1,0 +1,17 @@
+# Copy this file as terraform.tfvars and fill in your values
+# NEVER commit terraform.tfvars to the repo (it's in .gitignore)
+
+# do_token = "dop_v1_xxxxxxxxxx"   <- better to use TF_VAR_do_token as env var
+
+region                  = "ams3"
+droplet_size            = "s-1vcpu-1gb"
+droplet_image           = "ubuntu-22-04-x64"
+# snapshot_id           = "123456789"          # create from snapshot instead of image
+droplet_name            = "my-server"
+ssh_key_fingerprint     = "your-key-name-in-DO"
+ansible_user            = "deploy"
+ansible_ssh_private_key = "~/.ssh/id_rsa"
+inventory_output_path   = "../ansible/inventory/hosts.ini"
+tags                    = ["terraform", "ansible"]
+# project_name          = "My Project"         # assign droplet to a DO project
+# ssh_allowed_ips       = ["YOUR.IP.HERE/32"]  # restrict SSH to your IP

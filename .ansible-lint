@@ -1,0 +1,19 @@
+---
+warn_list:
+  - var-naming[no-role-prefix]
+  - yaml[comments-indentation]
+  - yaml[line-length]
+  - name[template]
+  - fqcn[action-core]
+
+skip_list:
+  - role-name
+
+offline: false
+
+kinds:
+  - playbook: "ansible/playbooks/*.yml"
+  - tasks: "ansible/roles/*/tasks/*.yml"
+  - handlers: "ansible/roles/*/handlers/*.yml"
+  - vars: "ansible/roles/*/vars/*.yml"
+  - defaults: "ansible/roles/*/defaults/*.yml"

@@ -1,0 +1,32 @@
+---
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: read-all
+
+jobs:
+  pre-commit:
+    name: Runs pre-commit checks against the repository code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
+      - name: Setup Python
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Python Requirements
+        run: pip install -r requirements.txt
+
+      - name: Install Ansible Requirements
+        run: ansible-galaxy install -r ansible/requirements.yml --force
+
+      - name: Run Pre-Commit checks
+        uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd

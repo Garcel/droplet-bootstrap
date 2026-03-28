@@ -1,0 +1,67 @@
+---
+- name: Harden sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    validate: "sshd -t -f %s"
+  loop:
+    - { regexp: '^#?PermitRootLogin',          line: 'PermitRootLogin no' }
+    - { regexp: '^#?PasswordAuthentication',    line: 'PasswordAuthentication no' }
+    - { regexp: '^#?PermitEmptyPasswords',      line: 'PermitEmptyPasswords no' }
+    - { regexp: '^#?ChallengeResponseAuthentication', line: 'ChallengeResponseAuthentication no' }
+    - { regexp: '^#?KbdInteractiveAuthentication',    line: 'KbdInteractiveAuthentication no' }
+    - { regexp: '^#?UsePAM',                   line: 'UsePAM no' }
+    - { regexp: '^#?X11Forwarding',             line: 'X11Forwarding no' }
+    - { regexp: '^#?MaxAuthTries',              line: 'MaxAuthTries 3' }
+    - { regexp: '^#?LoginGraceTime',            line: 'LoginGraceTime 20' }
+    - { regexp: '^#?AllowAgentForwarding',      line: 'AllowAgentForwarding no' }
+  notify: Restart sshd
+
+- name: Restrict SSH access to deploy user only
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?AllowUsers'
+    line: 'AllowUsers deploy'
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
+
+- name: Set warning banner for SSH
+  ansible.builtin.copy:
+    content: |
+      ******************************************************************
+      * This system is for authorized use only.                        *
+      * All connections are monitored and recorded.                    *
+      * Disconnect IMMEDIATELY if you are not an authorized user.      *
+      ******************************************************************
+    dest: /etc/issue.net
+    mode: "0644"
+
+- name: Enable SSH banner
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Banner'
+    line: 'Banner /etc/issue.net'
+    validate: "sshd -t -f %s"
+  notify: Restart sshd
+
+- name: Configure fail2ban SSH jail
+  ansible.builtin.copy:
+    content: |
+      [sshd]
+      enabled  = true
+      port     = ssh
+      filter   = sshd
+      logpath  = /var/log/auth.log
+      maxretry = 3
+      bantime  = 3600
+      findtime = 600
+    dest: /etc/fail2ban/jail.d/sshd.conf
+    mode: "0644"
+  notify: Restart fail2ban
+
+- name: Enable and start fail2ban
+  ansible.builtin.systemd:
+    name: fail2ban
+    enabled: true
+    state: started
