@@ -18,10 +18,12 @@ die()  { echo -e "${RED}[error]${NC}  $*" >&2; exit 1; }
 # ── Pre-flight checks ────────────────────────────────────────────────────────
 command -v terraform >/dev/null 2>&1 || die "terraform not found"
 
-[[ -z "${TF_VAR_do_token:-}" ]] && die "TF_VAR_do_token is not set. Export your DigitalOcean token."
+[[ -z "${TF_VAR_do_token:-}" ]] && \
+    die "TF_VAR_do_token is not set. Export your DigitalOcean token."
 
 # ── Confirmation ──────────────────────────────────────────────────────────────
-warn "This will destroy ALL resources managed by Terraform (droplet, firewall, project assignment)."
+warn "This will destroy ALL resources managed by Terraform" \
+    "(droplet, firewall, project assignment)."
 read -rp "Are you sure? (yes/no): " confirm
 [[ "$confirm" == "yes" ]] || { log "Aborted."; exit 0; }
 
@@ -35,8 +37,8 @@ terraform -chdir="$TF_DIR" destroy -auto-approve
 # ── Clean up generated files ──────────────────────────────────────────────────
 INVENTORY="$ANSIBLE_DIR/inventory/hosts.ini"
 if [[ -f "$INVENTORY" ]]; then
-  rm "$INVENTORY"
-  log "Removed generated inventory ($INVENTORY)"
+    rm "$INVENTORY"
+    log "Removed generated inventory ($INVENTORY)"
 fi
 
 log "All resources destroyed."

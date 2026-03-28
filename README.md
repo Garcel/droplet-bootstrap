@@ -98,7 +98,7 @@ The playbook applies the following hardening measures to the droplet:
 
 | Layer | Measure |
 |---|---|
-| **SSH** | Password auth disabled, root login disabled, `AllowUsers deploy` only, MaxAuthTries 3, X11/agent forwarding off |
+| **SSH** | Password auth disabled, root login disabled, `AllowUsers deploy`, MaxAuthTries 3 |
 | **Users** | Non-root `deploy` user with SSH key + passwordless sudo, root locked out of SSH |
 | **Firewall (UFW)** | Default deny incoming, allow 22/80/443 only |
 | **Firewall (DO)** | Optional `ssh_allowed_ips` to restrict SSH at the cloud level |
@@ -107,7 +107,7 @@ The playbook applies the following hardening measures to the droplet:
 | **Updates** | Automatic daily security patches via unattended-upgrades |
 | **Filesystem** | `/run/shm` mounted noexec/nosuid/nodev, core dumps disabled |
 | **Shell history** | Commands containing TOKEN/SECRET/KEY/PASSWORD auto-excluded, space-prefixed commands ignored |
-| **IaC** | Providers pinned to exact versions, `.terraform.lock.hcl` committed for SHA verification, detect-secrets hook |
+| **IaC** | Providers pinned to exact versions, `.terraform.lock.hcl` committed, detect-secrets hook |
 | **SSH banner** | Legal warning displayed before login |
 
 ---
@@ -119,7 +119,8 @@ The playbook applies the following hardening measures to the droplet:
 - [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.5.0
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/) >= 2.14
 - [pre-commit](https://pre-commit.com/#install) >= 3.7.0
-- A [DigitalOcean](https://cloud.digitalocean.com/) account with an API token (see [required scopes](#-api-token-scopes) below)
+- A [DigitalOcean](https://cloud.digitalocean.com/) account with an API token
+  (see [required scopes](#-api-token-scopes) below)
 - An SSH key registered in your DigitalOcean account
 
 ### Setup
@@ -187,7 +188,8 @@ The script will:
 ./scripts/destroy.sh
 ```
 
-The script will ask for confirmation, then destroy all resources (droplet, firewall, project assignment) and clean up the generated inventory file.
+The script will ask for confirmation, then destroy all resources
+(droplet, firewall, project assignment) and clean up the generated inventory file.
 
 ---
 

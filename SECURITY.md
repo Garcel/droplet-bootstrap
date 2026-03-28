@@ -17,8 +17,10 @@ Only the latest version of this repository is actively maintained and eligible f
 
 If you discover a security vulnerability in this project, please report it responsibly by using one of the following methods:
 
-- **GitHub Private Vulnerability Reporting** *(preferred)*: Use the [Security Advisories](../../security/advisories/new) feature in this repository.
-- **Email**: If you prefer, reach out directly via email. You can find contact details in the repository owner's GitHub profile.
+- **GitHub Private Vulnerability Reporting** *(preferred)*:
+  Use the [Security Advisories](../../security/advisories/new) feature in this repository.
+- **Email**: If you prefer, reach out directly via email.
+  You can find contact details in the repository owner's GitHub profile.
 
 ### What to include in your report
 
@@ -39,7 +41,8 @@ To help us triage and resolve the issue as quickly as possible, please include:
 | Initial assessment           | Within 5 days   |
 | Fix or mitigation published  | Within 30 days  |
 
-We will keep you informed throughout the process. If we need more information, we will reach out via the same channel you used to report.
+We will keep you informed throughout the process. If we need more information,
+we will reach out via the same channel you used to report.
 
 ---
 
@@ -63,7 +66,8 @@ The following are **out of scope**:
 
 When contributing to this repository, please follow these guidelines:
 
-- **Never commit secrets**: API tokens, SSH private keys, and passwords must never be committed. Use environment variables or a secrets manager.
+- **Never commit secrets**: API tokens, SSH private keys, and passwords must never be committed.
+  Use environment variables or a secrets manager.
 - **Use `.gitignore`**: Ensure sensitive files like `terraform.tfvars` and `*.pem` are listed in `.gitignore`.
 - **Least privilege**: Firewall rules and IAM policies should follow the principle of least privilege.
 - **Pin versions**: Always pin provider and module versions to avoid unexpected updates pulling in vulnerable code.

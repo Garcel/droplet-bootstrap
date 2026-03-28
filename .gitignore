@@ -10,12 +10,16 @@ terraform/.terraform.tfstate.lock.info
 
 # Ansible
 ansible/inventory/hosts.ini
+.ansible/
 
 # IDE
 .idea/
 
 # Claude Code
 .claude/
+
+# Python
+.python-version
 
 # General
 .env

@@ -11,6 +11,8 @@ skip_list:
 
 offline: false
 
+project_dir: ansible/
+
 kinds:
   - playbook: "ansible/playbooks/*.yml"
   - tasks: "ansible/roles/*/tasks/*.yml"

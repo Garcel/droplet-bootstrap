@@ -4,14 +4,15 @@ Infrastructure as code for DigitalOcean droplets: Terraform provisions, Ansible 
 
 ## Stack
 
-- **Terraform** (>= 1.5.0) — provisions DigitalOcean Droplet (from image or snapshot) + Firewall + Project assignment, generates Ansible inventory
+- **Terraform** (>= 1.5.0) — provisions DigitalOcean Droplet (from image or snapshot)
+  - Firewall + Project assignment, generates Ansible inventory
 - **Ansible** (>= 2.14) — configures and hardens the droplet via playbooks/roles
 - **DigitalOcean** — cloud provider
 - **pre-commit** — linting and security checks (shellcheck, yamllint, ansible-lint, checkov, detect-secrets, terraform fmt/validate)
 
 ## Project structure
 
-```
+```text
 terraform/                # HCL configs (main, variables, outputs, provider)
 terraform/templates/      # Ansible inventory template
 ansible/playbooks/        # Ansible playbooks (setup.yml)
@@ -31,7 +32,8 @@ requirements.txt          # Python deps for CI
 
 1. `export TF_VAR_do_token="..."`
 2. `cp terraform/terraform.tfvars.example terraform/terraform.tfvars` and fill in values
-3. `./scripts/deploy.sh` — runs terraform init/plan/apply as root, creates deploy user, hardens SSH, prints connection info for deploy@IP
+3. `./scripts/deploy.sh` — runs terraform init/plan/apply as root, creates deploy user,
+   hardens SSH, prints connection info for deploy@IP
 4. `./scripts/destroy.sh` — destroys all resources and cleans up generated inventory
 
 ## Security model

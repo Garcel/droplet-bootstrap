@@ -11,3 +11,9 @@ no-duplicate-heading:
 
 # Allow trailing punctuation in headings
 no-trailing-punctuation: false
+
+# Allow emphasis used as headings (setup steps)
+no-emphasis-as-heading: false
+
+# Table column style
+table-column-style: false
