@@ -8,7 +8,7 @@ Infrastructure as code for DigitalOcean droplets: Terraform provisions, Ansible 
   - Firewall + Project assignment, generates Ansible inventory
 - **Ansible** (>= 2.14) — configures and hardens the droplet via playbooks/roles
 - **DigitalOcean** — cloud provider
-- **pre-commit** — linting and security checks (shellcheck, yamllint, ansible-lint, checkov, detect-secrets, terraform fmt/validate)
+- **pre-commit** — linting and security checks (shellcheck, yamllint, ansible-lint, terraform fmt/validate)
 
 ## Project structure
 
@@ -50,7 +50,6 @@ requirements.txt          # Python deps for CI
 - Optional `ssh_allowed_ips` to restrict SSH at the DO firewall level
 - Optional `project_name` to assign the droplet to a DO project
 - Optional `snapshot_id` to create the droplet from a snapshot instead of a base image
-- detect-secrets pre-commit hook to prevent accidental secret commits
 
 ## Conventions
 
